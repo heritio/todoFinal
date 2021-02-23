@@ -1,0 +1,23 @@
+{
+  "name": "todofinal",
+  "version": "1.0.0",
+  "description": "TodoApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heritio/todoFinal.git"
+  },
+  "author": "Heritier",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heritio/todoFinal/issues"
+  },
+  "homepage": "https://github.com/heritio/todoFinal#readme",
+  "devDependencies": {
+    "webpack": "^5.23.0",
+    "webpack-cli": "^4.5.0"
+  }
+}
