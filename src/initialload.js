@@ -42,11 +42,11 @@ function initialLoadForm(){
     
     let submitBtn = document.createElement("button");
     submitBtn.textContent = "Create";
-    submitBtn.classList.add("submitbtn")
+    submitBtn.classList.add("submitbtn", "submitbtninfo")
 
     let cancelBtn = document.createElement("button");
     cancelBtn.textContent = "Cancel"
-    cancelBtn.classList.add("cancelbtn");
+    cancelBtn.classList.add("cancelbtn", "cancelbtninfo");
 
     inputDiv.append(labelTitle);
     inputDiv.append(inputTitle);
@@ -115,6 +115,23 @@ function initialLoadInterface(){
    
 }
 
+function changeNameMsg(){
+    
+    let changeNamePopup = document.createElement("div");
+    changeNamePopup.classList.add("nameerrorpopup");
+    let ourText = document.createElement("p");
+    ourText.textContent = "A folder with this name already exists";
+    let exitBtn = document.createElement("button");
+    exitBtn.textContent = "close";
+    changeNamePopup.append(ourText);
+    changeNamePopup.append(exitBtn);
+    content.append(changeNamePopup);
+
+    exitBtn.addEventListener("click", () => {
+        changeNamePopup.classList.remove("spawn");
+    })
+}
 
 
-export  {initialLoadForm ,initialProjectForm, initialLoadInterface};
+
+export  {initialLoadForm ,initialProjectForm, initialLoadInterface, changeNameMsg};

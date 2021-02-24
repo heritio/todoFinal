@@ -1,8 +1,9 @@
-import {initialLoadForm, initialLoadInterface, initialProjectForm} from "./initialload";
+import {initialLoadForm, initialLoadInterface, initialProjectForm, changeNameMsg} from "./initialload";
 
 initialLoadForm();
 initialProjectForm();
 initialLoadInterface();
+changeNameMsg();
 
 
 let projectFolders = document.querySelector("#projects");
@@ -25,26 +26,7 @@ const ourTasks = (() => {
                       {title: "Task three", 
                       description: "this task goes like this and this", 
                       dueDate: "2021-03-26", priority: "1", 
-                      notes: "these are the notes for this other one", checklist: false}]},
-                      
-                      {projectTitle: "New project folder", 
-                      tasks: [{title: "Task four", 
-                      description: "this task goes like this", 
-                      dueDate: "2021-07-22", priority: "2", 
-                      notes: "these are the notes", checklist: false},
-                      {title: "Task five", 
-                      description: "this task goes like this and this", 
-                      dueDate: "2021-03-26", priority: "1", 
-                      notes: "these are the notes for this other one", checklist: false}]},
-                      {projectTitle: "New project folder", 
-                      tasks: [{title: "Task four", 
-                      description: "this task goes like this", 
-                      dueDate: "2021-07-22", priority: "2", 
-                      notes: "these are the notes", checklist: false},
-                      {title: "Task five", 
-                      description: "this task goes like this and this", 
-                      dueDate: "2021-03-26", priority: "1", 
-                      notes: "these are the notes for this other one", checklist: false}]} ];
+                      notes: "these are the notes for this other one", checklist: false}]}];
         
     
   
@@ -165,6 +147,7 @@ const ourTasks = (() => {
               newTaskBtn.classList.add("newtaskbtn");
               coll[p].nextElementSibling.append(newTaskBtn);
             }
+
         },
 
         renderTasksDetail(ourTaskTittle,folderName){
@@ -234,11 +217,14 @@ const ourTasks = (() => {
           
         },
 
+
         replaceProjects(newFolderName){
             let newFolder = {projectTitle:newFolderName, tasks:[]};
             _ourProjects.push(newFolder);
 
             let projectsDisplay = document.querySelector(".projects");
+            let detailsDisplay = document.querySelectorAll(".pointerStyle");
+
             
             let ourlist = _ourProjects;
               
@@ -268,14 +254,32 @@ const ourTasks = (() => {
                 newProjectBtn.addEventListener("click", () => {
                     projectForm.classList.add("spawn");
                 });              
+
+                updatedProjectList.addEventListener("click", function(e) {
+                    if(!e.target.classList.contains("pointerstyle")){
+                        return;
+                    }
+                    ourTasks.renderTasksDetail(e.target.textContent, e.target.getAttribute("data-folder"));
+                });
+
+                let ourProjectsFolders = document.querySelectorAll(".projects")
+
+                ourProjectsFolders.forEach(e => e.addEventListener("click", function(e){
+    if(!e.target.classList.contains("newtaskbtn")){
+        return;
+    }
+    let ourInputField = document.querySelector(".inputinfo");
+    ourInputField.classList.add("spawn");
+}));
+
+
+                
+                
+                
         },
 
         renderNewTask(title,description,dueDate,priority,notes){
-            {title, 
-            description, 
-            dueDate, priority, 
-            notes, 
-            checklist: false}
+            let newObj = {title, description, dueDate, priority, notes, checklist: false};
             
         }
 
@@ -289,8 +293,29 @@ const ourTasks = (() => {
   ourTasks.renderProjects();
   ourTasks.renderTasksCollapsibleContainer();
   ourTasks.renderTasksTittle();
+  
+let newProjectBtn = document.querySelector(".newprojectbtn");
+let cancelBtnProject = document.querySelector(".cancelbtnproject");
+let submitBtnProject = document.querySelector(".submitbtnproject");
+let projectInputField = document.getElementById("projectnamefield");
+let projectForm = document.querySelector(".projectform");
+let ourProjectsFolders = document.querySelectorAll(".projects")
+let cancelBtnInfoInput = document.querySelector(".cancelbtninfo");
+let createBtnInfoInput = document.querySelector(".submitbtninfo");
 
+ourProjectsFolders.forEach(e => e.addEventListener("click", function(e){
+    if(!e.target.classList.contains("newtaskbtn")){
+        return;
+    }
+    let ourInputField = document.querySelector(".inputinfo");
+    ourInputField.classList.add("spawn");
+}));
 
+cancelBtnInfoInput.addEventListener("click", (e)=> {
+   e.preventDefault();
+    let inputInfoForm = document.querySelector(".inputinfo");
+    inputInfoForm.classList.remove("spawn");
+})
 
 
 projectFolders.addEventListener("click", function(e) {
@@ -300,11 +325,9 @@ projectFolders.addEventListener("click", function(e) {
     ourTasks.renderTasksDetail(e.target.textContent, e.target.getAttribute("data-folder"));
 });
 
-let newProjectBtn = document.querySelector(".newprojectbtn");
-let cancelBtnProject = document.querySelector(".cancelbtnproject");
-let submitBtnProject = document.querySelector(".submitbtnproject");
-let projectInputField = document.getElementById("projectnamefield");
-let projectForm = document.querySelector(".projectform");
+
+
+
 
 
 
@@ -320,14 +343,21 @@ cancelBtnProject.addEventListener("click", (e) => {
 
 submitBtnProject.addEventListener("click", (e) => {
     e.preventDefault();
+    let errormsg = document.querySelector(".nameerrorpopup");
+    let listToCheck = ourTasks.getList();
+    if(listToCheck.some(listToCheck => listToCheck.projectTitle === projectInputField.value)){
+       errormsg.classList.add("spawn");
+       return;
+    }else if(projectInputField.value == ""){
+        return;
+    }
 
    ourTasks.replaceProjects(projectInputField.value);
    ourTasks.renderTasksCollapsibleContainer();
    ourTasks.renderTasksTittle();
   
    projectForm.classList.remove("spawn");
-
-   
+ 
 });
 
 

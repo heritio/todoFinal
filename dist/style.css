@@ -44,6 +44,26 @@
   z-index: -1;
   background-color: white;
 }
+
+.nameerrorpopup{
+  display: none;
+  width: max-content;
+  height: max-content;
+  margin: 30px auto;
+  border:1px solid lightskyblue ;
+  border-radius: 3px;
+  padding: 20px;
+  position: fixed;
+  left: 45%;
+  z-index: -1;
+  background-color: white;
+}
+.nameerrorpopup > *{
+  text-align: center;
+  width: 100%;
+  margin: 5px auto;
+}
+
 .projectform > *{
   width: 90%;
   margin: 5px 0;
