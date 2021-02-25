@@ -10,15 +10,18 @@ function initialLoadForm(){
     labelTitle.textContent = "Task name";
     let inputTitle = document.createElement("INPUT");
     inputTitle.setAttribute("type", "text");
+    inputTitle.classList.add("titleinputvalue");
 
     let labelDescription = document.createElement("h3");
     labelDescription.textContent = "description";
     let inputDescription = document.createElement("TEXTAREA");
+    inputDescription.classList.add("descriptioninputvalue")
 
     let labelDueDate = document.createElement("h3");
     labelDueDate.textContent = "Due Date";
     let inputDate = document.createElement("INPUT");
     inputDate.setAttribute("type", "date");
+    inputDate.classList.add("dateinputvalue");
 
     let labelPriority = document.createElement("h3");
     labelPriority.textContent = "Priority";
@@ -35,11 +38,15 @@ function initialLoadForm(){
     inputPriority.add(inputPriorityOption1, null);
     inputPriority.add(inputPriorityOption2, null);
     inputPriority.add(inputPriorityOption3, null);
-
+    inputPriority.classList.add("priorityinputvalue");
+    
+    
     let labelNotes = document.createElement("h3");
     labelNotes.textContent = "Notes";
     let inputNotes = document.createElement("TEXTAREA");
-    
+    inputNotes.classList.add("notesinputvalue");
+   
+
     let submitBtn = document.createElement("button");
     submitBtn.textContent = "Create";
     submitBtn.classList.add("submitbtn", "submitbtninfo")
@@ -58,6 +65,7 @@ function initialLoadForm(){
     inputDiv.append(inputPriority);
     inputDiv.append(labelNotes);
     inputDiv.append(inputNotes);
+
     inputDiv.append(cancelBtn);
     inputDiv.append(submitBtn);
     

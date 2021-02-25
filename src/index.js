@@ -1,9 +1,11 @@
 import {initialLoadForm, initialLoadInterface, initialProjectForm, changeNameMsg} from "./initialload";
 
+
 initialLoadForm();
 initialProjectForm();
 initialLoadInterface();
 changeNameMsg();
+
 
 
 let projectFolders = document.querySelector("#projects");
@@ -265,21 +267,54 @@ const ourTasks = (() => {
                 let ourProjectsFolders = document.querySelectorAll(".projects")
 
                 ourProjectsFolders.forEach(e => e.addEventListener("click", function(e){
-    if(!e.target.classList.contains("newtaskbtn")){
-        return;
+                if(!e.target.classList.contains("newtaskbtn")){
+                return;
     }
-    let ourInputField = document.querySelector(".inputinfo");
-    ourInputField.classList.add("spawn");
-}));
+                    let ourInputField = document.querySelector(".inputinfo");
+                    ourInputField.classList.add("spawn");
+                }));
 
-
+                initialLoadForm();
                 
                 
                 
         },
 
-        renderNewTask(title,description,dueDate,priority,notes){
-            let newObj = {title, description, dueDate, priority, notes, checklist: false};
+        renderNewTask(title,description,dueDate,priority,notes,ourFolderName){
+            
+            for(let i = 0; i < _ourProjects.length; i++){
+                if(_ourProjects[i].projectTitle == ourFolderName){
+                    _ourProjects[i].tasks.push({title, description, dueDate, priority, notes, checklist: false});
+                }else{
+                    continue;
+                }
+            }
+
+
+            
+        },
+        updateTasksTitle(ourFolderName){
+            let insertDiv = document.querySelectorAll(".projects");
+            let insertMainDiv = document.querySelectorAll(".content");
+            
+            for(let i = 0; i < insertDiv.length; i++){
+                if(insertDiv[i].firstElementChild.textContent == ourFolderName){
+                    
+                }
+            }
+
+            var coll = document.querySelectorAll(".collapsible");
+            for(let p = 0; p < coll.length; p++){
+              let projectFolderName = coll[p].textContent;
+              let ourTitlesArr = ourTasks.getTitle(projectFolderName);
+              for(let u = 0; u < ourTitlesArr.length; u++){
+                let titleElem = document.createElement("h3");
+                titleElem.textContent = String(ourTitlesArr[u]);
+                titleElem.classList.add("pointerstyle");
+                titleElem.setAttribute("data-folder", coll[p].textContent)
+                coll[p].nextElementSibling.append(titleElem);
+              }
+            }
             
         }
 
@@ -293,6 +328,7 @@ const ourTasks = (() => {
   ourTasks.renderProjects();
   ourTasks.renderTasksCollapsibleContainer();
   ourTasks.renderTasksTittle();
+  
   
 let newProjectBtn = document.querySelector(".newprojectbtn");
 let cancelBtnProject = document.querySelector(".cancelbtnproject");
@@ -327,10 +363,6 @@ projectFolders.addEventListener("click", function(e) {
 
 
 
-
-
-
-
 newProjectBtn.addEventListener("click", () => {
     projectForm.classList.add("spawn");
 });
@@ -357,7 +389,69 @@ submitBtnProject.addEventListener("click", (e) => {
    ourTasks.renderTasksTittle();
   
    projectForm.classList.remove("spawn");
+
+   updateFolderSelection();
  
 });
 
+
+(function addFolderSelection(){
+    let parentItem = document.querySelector(".inputinfo");
+    let childToIsertBefore = document.querySelector(".cancelbtninfo");
+     
+    let folderNames = document.getElementsByClassName("collapsible");
+
+    let labelFolderSelection = document.createElement("h3");
+    labelFolderSelection.textContent = "Folder";
+    let folderSelection = document.createElement("SELECT");
+    for(let t = 0; t < Array.from(folderNames).length; t++){
+      let ourOption = document.createElement("OPTION");
+      ourOption.value = folderNames[t].textContent;
+      ourOption.text = folderNames[t].textContent;
+      folderSelection.add(ourOption, null);
+    }
+    folderSelection.classList.add("folderselection");
+
+    parentItem.insertBefore(folderSelection, childToIsertBefore);
+ 
+})();
+
+
+function updateFolderSelection(){
+    let parentItem = document.querySelector(".inputinfo");
+    let childToReplace = document.querySelector(".folderselection");
+     
+    let folderNames = document.getElementsByClassName("collapsible");
+
+    let labelFolderSelection = document.createElement("h3");
+    labelFolderSelection.textContent = "Folder";
+    let folderSelection = document.createElement("SELECT");
+    for(let t = 0; t < Array.from(folderNames).length; t++){
+      let ourOption = document.createElement("OPTION");
+      ourOption.value = folderNames[t].textContent;
+      ourOption.text = folderNames[t].textContent;
+      folderSelection.add(ourOption, null);
+    }
+   
+    folderSelection.classList.add("folderselection");
+    childToReplace.replaceWith(folderSelection);
+}
+
+
+
+createBtnInfoInput.addEventListener("click", (e)=> {
+
+    let ourTitle = document.querySelector(".titleinputvalue");
+    let description = document.querySelector(".descriptioninputvalue");
+    let dueDate = document.querySelector(".dateinputvalue");
+    let priority = document.querySelector(".priorityinputvalue");
+    let notes = document.querySelector(".notesinputvalue");
+    let ourFolderName = document.querySelector(".folderselection");
+
+    if(ourTitle.value == ""){
+        return;
+    }
+    ourTasks.renderNewTask(ourTitle.value, description.value, dueDate.value, priority.value,notes.value, ourFolderName.value);
+    ourTasks.renderTasksTittle(ourFolderName);
+});
 
