@@ -269,10 +269,12 @@ const ourTasks = (() => {
                 ourProjectsFolders.forEach(e => e.addEventListener("click", function(e){
                 if(!e.target.classList.contains("newtaskbtn")){
                 return;
-    }
+               }
                     let ourInputField = document.querySelector(".inputinfo");
                     ourInputField.classList.add("spawn");
                 }));
+
+                
 
                 initialLoadForm();
                 
@@ -293,32 +295,51 @@ const ourTasks = (() => {
 
             
         },
-        updateTasksTitle(ourFolderName){
-            let insertDiv = document.querySelectorAll(".projects");
-            let insertMainDiv = document.querySelectorAll(".content");
-            
-            for(let i = 0; i < insertDiv.length; i++){
-                if(insertDiv[i].firstElementChild.textContent == ourFolderName){
-                    
-                }
-            }
-
-            var coll = document.querySelectorAll(".collapsible");
-            for(let p = 0; p < coll.length; p++){
-              let projectFolderName = coll[p].textContent;
-              let ourTitlesArr = ourTasks.getTitle(projectFolderName);
-              for(let u = 0; u < ourTitlesArr.length; u++){
-                let titleElem = document.createElement("h3");
-                titleElem.textContent = String(ourTitlesArr[u]);
-                titleElem.classList.add("pointerstyle");
-                titleElem.setAttribute("data-folder", coll[p].textContent)
-                coll[p].nextElementSibling.append(titleElem);
+        updateTasksTitle(ourFolderName, ourTitle){
+            let targetFolder = document.querySelectorAll(".content");
+            for(let i = 0; i < targetFolder.length; i++){
+              if(targetFolder[i].parentElement.textContent == ourFolderName){
+                let ourTitleElem = document.createElement("h3");
+                ourTitleElem.textContent = ourTitle;
+                ourTitleElem.classList.add("pointerstyle");
+                targetFolder[i].prepend(ourTitleElem);
+                targetFolder.setAttribute("data-folder", ourFolderName);
+              }else{
+                continue;
               }
             }
             
+        },
+
+        reRenderTasks(ourFolderName){
+         let ourFoldersList = document.querySelectorAll(".collapsible");
+         let ourTasksNames = this.getTitle(ourFolderName);
+        
+         let newDiv = document.createElement("div");
+         for(let t = 0; t < ourFoldersList.length; t++){
+            let targetContentDiv = ourFoldersList[t].nextElementSibling;
+             if(ourFoldersList[t].textContent == ourFolderName){
+               for(let y = 0; y < ourTasksNames.length; y++){
+                let ourTitleNode = document.createElement("h3");
+                ourTitleNode.textContent = ourTasksNames[y];
+                ourTitleNode.classList.add("pointerstyle");
+                ourTitleNode.setAttribute("data-folder", ourFolderName);
+                newDiv.append(ourTitleNode);
+               }
+               let newTaskBtn = document.createElement("button");
+                newTaskBtn.textContent = "+ Add Task";
+                newTaskBtn.classList.add("newtaskbtn");
+                newDiv.append(newTaskBtn);
+                targetContentDiv.replaceWith(newDiv); 
+                newDiv.classList.add("collapsible");
+
+             }
+
+         }
+         
+           
         }
-
-
+         
         
        };
 })();
@@ -439,19 +460,22 @@ function updateFolderSelection(){
 
 
 
-createBtnInfoInput.addEventListener("click", (e)=> {
-
+createBtnInfoInput.addEventListener("click", function(e){
+    e.preventDefault();
+    
     let ourTitle = document.querySelector(".titleinputvalue");
     let description = document.querySelector(".descriptioninputvalue");
     let dueDate = document.querySelector(".dateinputvalue");
     let priority = document.querySelector(".priorityinputvalue");
     let notes = document.querySelector(".notesinputvalue");
     let ourFolderName = document.querySelector(".folderselection");
-
+    
     if(ourTitle.value == ""){
         return;
     }
+    
     ourTasks.renderNewTask(ourTitle.value, description.value, dueDate.value, priority.value,notes.value, ourFolderName.value);
-    ourTasks.renderTasksTittle(ourFolderName);
+    ourTasks.reRenderTasks(ourFolderName.value);
+    
 });
 
